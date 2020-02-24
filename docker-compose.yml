@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
     webserver:
-        build: ./
+        image: thepaperlessproject/paperless
         # uncomment the following line to start automatically on system boot
         restart: always
         ports:
@@ -30,7 +30,7 @@ services:
         command: ["gunicorn", "-b", "0.0.0.0:8000"]
 
     consumer:
-        build: ./
+        image: thepaperlessproject/paperless
         # uncomment the following line to start automatically on system boot
         restart: always
         depends_on:
@@ -50,4 +50,12 @@ services:
             - /mnt/paperless/consumed:/export
         env_file: docker-compose.env
         command: ["document_consumer"]
-
+volumes:
+    paperless_data:
+        external: true
+    /mnt/paperless/consume:
+        external: true
+    paperless_media:
+        external: true
+    /mnt/paperless/consumed:
+        external: true
