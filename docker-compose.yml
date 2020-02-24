@@ -8,7 +8,7 @@ services:
         ports:
             # You can adapt the port you want Paperless to listen on by
             # modifying the part before the `:`.
-            - "8000:8000"
+            - "8080:8000"
         healthcheck:
             test: ["CMD", "curl" , "-f", "http://localhost:8000"]
             interval: 30s
@@ -19,7 +19,7 @@ services:
             - paperless_media:/usr/src/paperless/media
             # You have to adapt the local path you want the consumption
             # directory to mount to by modifying the part before the ':'.
-            - /mnt/paperless/consume:/consume
+            - paperless_consume:/consume
         env_file: docker-compose.env
         # The reason the line is here is so that the webserver that doesn't do
         # any text recognition and doesn't have to install unnecessary
@@ -41,21 +41,21 @@ services:
             - paperless_media:/usr/src/paperless/media
             # This should be set to the same value as the consume directory
             # in the webserver service above.
-            - /mnt/paperless/consume:/consume
+            - paperless_consume:/consume
             # Likewise, you can add a local path to mount a directory for
             # exporting. This is not strictly needed for paperless to
             # function, only if you're exporting your files: uncomment
             # it and fill in a local path if you know you're going to
             # want to export your documents.
-            - /mnt/paperless/consumed:/export
+            -  paperless_consumed:/export
         env_file: docker-compose.env
         command: ["document_consumer"]
 volumes:
     paperless_data:
         external: true
-    /mnt/paperless/consume:
+    paperless_consume:
         external: true
     paperless_media:
         external: true
-    /mnt/paperless/consumed:
+    paperless_consumed:
         external: true
